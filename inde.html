@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeskDash | Calculadora Pro</title>
+    <style>
+        :root {
+            --bg-desk: #1e293b;
+            --panel-bg: #ffffff;
+            --primary: #3b82f6;
+            --calc-dark: #2d3436;
+            --accent: #ff9f43;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg-desk);
+            overflow: hidden;
+        }
+
+        /* Escritorio / Dashboard */
+        #desktop {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: radial-gradient(circle, #334155 0%, #0f172a 100%);
+        }
+
+        /* Barra Lateral de Control */
+        #taskbar {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            padding: 15px;
+            display: flex;
+            gap: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .btn-toggle {
+            padding: 8px 15px;
+            border-radius: 6px;
+            border: none;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Contenedor de la Calculadora Estilo Escritorio */
+        .window {
+            width: 320px;
+            background: var(--calc-dark);
+            border-radius: 12px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            position: absolute;
+            top: 100px;
+            left: 50px;
+            user-select: none;
+            transition: transform 0.2s ease, opacity 0.2s;
+        }
+
+        .window-header {
+            background: rgba(255,255,255,0.05);
+            padding: 10px 15px;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            cursor: move;
+        }
+
+        .close-dot {
+            width: 12px;
+            height: 12px;
+            background: #ff5f56;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        /* Interfaz de la Calculadora */
+        #display {
+            width: 100%;
+            height: 80px;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 2.5rem;
+            text-align: right;
+            padding: 10px 20px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: #444;
+            padding-bottom: 1px;
+        }
+
+        .btn-calc {
+            height: 60px;
+            border: none;
+            background: #3d3d3d;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .btn-calc:hover { background: #4d4d4d; }
+        .btn-op { background: #555; color: var(--accent); }
+        .btn-equal { background: var(--primary); }
+        .btn-equal:hover { background: #2563eb; }
+
+        .hidden { opacity: 0; pointer-events: none; transform: scale(0.9); }
+
+        /* Widget Informativo Extra */
+        #info-card {
+            position: absolute;
+            right: 30px;
+            top: 100px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            width: 250px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="desktop">
+    <div id="taskbar">
+        <button class="btn-toggle" onclick="toggleWindow('calc-window')">🧮 Calculadora</button>
+        <button class="btn-toggle" onclick="toggleWindow('info-card')" style="background: #64748b;">ℹ️ Notas</button>
+    </div>
+
+    <div class="window" id="calc-window">
+        <div class="window-header">
+            <span>Calculadora Estándar</span>
+            <div class="close-dot" onclick="toggleWindow('calc-window')"></div>
+        </div>
+        <input type="text" id="display" readonly value="0">
+        <div class="buttons">
+            <button class="btn-calc btn-op" onclick="clearDisplay()">C</button>
+            <button class="btn-calc btn-op" onclick="deleteLast()">DEL</button>
+            <button class="btn-calc btn-op" onclick="appendToDisplay('/')">/</button>
+            <button class="btn-calc btn-op" onclick="appendToDisplay('*')">×</button>
+            
+            <button class="btn-calc" onclick="appendToDisplay('7')">7</button>
+            <button class="btn-calc" onclick="appendToDisplay('8')">8</button>
+            <button class="btn-calc" onclick="appendToDisplay('9')">9</button>
+            <button class="btn-calc btn-op" onclick="appendToDisplay('-')">-</button>
+            
+            <button class="btn-calc" onclick="appendToDisplay('4')">4</button>
+            <button class="btn-calc" onclick="appendToDisplay('5')">5</button>
+            <button class="btn-calc" onclick="appendToDisplay('6')">6</button>
+            <button class="btn-calc btn-op" onclick="appendToDisplay('+')">+</button>
+            
+            <button class="btn-calc" onclick="appendToDisplay('1')">1</button>
+            <button class="btn-calc" onclick="appendToDisplay('2')">2</button>
+            <button class="btn-calc" onclick="appendToDisplay('3')">3</button>
+            <button class="btn-calc btn-equal" style="grid-row: span 2;" onclick="calculate()">=</button>
+            
+            <button class="btn-calc" style="grid-column: span 2;" onclick="appendToDisplay('0')">0</button>
+            <button class="btn-calc" onclick="appendToDisplay('.')">.</button>
+        </div>
+    </div>
+
+    <div id="info-card" class="card">
+        <h3 style="margin-top:0">Memoria de Sesión</h3>
+        <p style="font-size: 0.9rem; color: #666;">Usa esta calculadora para tus operaciones rápidas de escritorio.</p>
+        <hr>
+        <div id="history" style="font-size: 0.8rem; color: var(--primary);">Sin operaciones recientes</div>
+    </div>
+</div>
+
+<script>
+    const display = document.getElementById('display');
+    const historyDiv = document.getElementById('history');
+
+    // Funciones de la Calculadora
+    function appendToDisplay(value) {
+        if (display.value === '0' && value !== '.') {
+            display.value = value;
+        } else {
+            display.value += value;
+        }
+    }
+
+    function clearDisplay() {
+        display.value = '0';
+    }
+
+    function deleteLast() {
+        display.value = display.value.slice(0, -1);
+        if (display.value === '') display.value = '0';
+    }
+
+    function calculate() {
+        try {
+            const result = eval(display.value);
+            historyDiv.innerText = `Última: ${display.value} = ${result}`;
+            display.value = result;
+        } catch (error) {
+            display.value = "Error";
+            setTimeout(clearDisplay, 1500);
+        }
+    }
+
+    // Funciones del Dashboard
+    function toggleWindow(id) {
+        const win = document.getElementById(id);
+        win.classList.toggle('hidden');
+    }
+
+    // Hacer la ventana movible (Drag and Drop simple)
+    const win = document.getElementById('calc-window');
+    const header = win.querySelector('.window-header');
+
+    header.onmousedown = function(event) {
+        let shiftX = event.clientX - win.getBoundingClientRect().left;
+        let shiftY = event.clientY - win.getBoundingClientRect().top;
+
+        function moveAt(pageX, pageY) {
+            win.style.left = pageX - shiftX + 'px';
+            win.style.top = pageY - shiftY + 'px';
+        }
+
+        function onMouseMove(event) {
+            moveAt(event.pageX, event.pageY);
+        }
+
+        document.addEventListener('mousemove', onMouseMove);
+
+        document.onmouseup = function() {
+            document.removeEventListener('mousemove', onMouseMove);
+            document.onmouseup = null;
+        };
+    };
+
+    header.ondragstart = function() { return false; };
+</script>
+
+</body>
+</html>
