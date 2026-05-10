@@ -4,7 +4,7 @@ ASIGNATURA: CONSTRUCCIÓN DE SOFTWARE (ASUC00947)
 Universidad: Universidad Continental
 Asignatura: Construcción de Software (ASUC00947)
 Título del Proyecto: DeskDash - Calculadora Pro con Entorno de Escritorio Virtual
-Integrantes (5 Colaboradores):
+Integrantes:
 ARRATIA QUISPE Yony Vidal  - Líder de Proyecto y Arquitecto de Software
 BARJA RODRIGUEZ Jeanpiere Levi  - Desarrollador Frontend y UI/UX
 LEACH CERNA Barclay Dario  - Especialista en QA y Pruebas Unitarias
@@ -25,34 +25,13 @@ Crear un dashboard interactivo que permita ocultar o mostrar herramientas según
 Estructura del Proyecto:
 El proyecto se organiza en un único archivo index.html que contiene la estructura (HTML), el diseño (CSS) y la lógica de interacción y cálculo (JS).
 3.2 Planificación
-Cronograma:
-Actividad
-Responsable
-Tiempo estimado
-Recursos necesarios
-Maquetación de Dashboard y Ventanas
-ARRATIA QUISPE Yony Vidal 
-6 horas
-VS Code, CSS Flexbox/Grid
-Lógica Aritmética y Drag-and-Drop
-BARJA RODRIGUEZ Jeanpiere Levi 
-10 horas
-JavaScript ES6
-Desarrollo de pruebas unitarias
-LEACH CERNA Barclay Dario 
-8 horas
-Console Test Suite
-Implementación Docker y despliegue
-SERNAQUE CARPIO David Emanuel 
-4 horas
-Docker Desktop
-Informe Técnico Final
-SICOS YUCRA Benjamin Illapa 
-6 horas
-Documentación técnica
+   Cronograma:
+   
 
 3.3 Experimentación
 Pruebas unitarias:
+<img width="627" height="379" alt="image" src="https://github.com/user-attachments/assets/e1c326a5-152b-47ad-8890-48a13a6d2f54" />
+
 JavaScript
 // Prueba de validación de la función calculate()
 function test_calculo() {
