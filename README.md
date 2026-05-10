@@ -64,7 +64,7 @@ Problemas y soluciones:
 Problema: El sistema de arrastre (drag) perdía el foco al mover el mouse muy rápido.
 Solución: Se implementó document.addEventListener en lugar de header.onmousemove para capturar el movimiento en toda la pantalla.
 
-5. Conclusiones y Recomendaciones
+6. Conclusiones y Recomendaciones
 Logros: Aplicación web con experiencia de usuario fluida, lógica de cálculo precisa y arquitectura contenerizada que cumple con los estándares de ingeniería de software.
 Mejoras futuras:
 Integrar GitHub Actions para automatizar el despliegue del contenedor Docker (CI/CD).
